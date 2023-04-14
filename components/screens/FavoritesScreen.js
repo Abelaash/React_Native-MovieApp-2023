@@ -1,28 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView,Modal } from 'react-native';
 import { connect } from 'react-redux';
 import Movie from './Movie';
 import { addmovie, deletemovie, editmovie, searchmovie } from "../../redux/actions";
 
 const FavoritesScreen = ({ favoritesList, ...props }) => {
-  // console.log(favoritesList)
-  // return {
-  // const renderMovies = ({ item }) => (
-  //   // <Movie
-  //   //   title={item.Title}
-  //   //   poster={item.Poster}
-  //   //   // year={item.Year}
-  //   //   // rated={item.Rated}
-  //   //   // runtime={item.Runtime}
-  //   //   // ratings={item.Ratings}
-  //   //   // genres={item.Genre}
-  //   //   // director={item.Director}
-  //   //   // actors={item.Actors}
-  //   // />
-
-  // )
-  // }
-  // console.log(favoritesList)
+  
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Favorites</Text>

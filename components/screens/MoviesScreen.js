@@ -7,7 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  ScrollView
+  ScrollView,
+  Modal,
+  Button
 } from "react-native";
 
 import { addmovie, deletemovie, editmovie, searchmovie } from "../../redux/actions";
@@ -19,24 +21,13 @@ import Movie from "./Movie";
 
 
 
-// const API_KEY = "94e64f01";
-// const MOVIE_API_URL = `https://www.omdbapi.com/?apikey=${API_KEY}&`;
 
 const Stack = createStackNavigator();
 
 const MoviesScreen = ({ navigation, searchedMovies, dispatch, ...props}) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
-  // const fetchMovies = async () => {
-  //   try {
-  //     const response = await fetch(`${MOVIE_API_URL}&s=${searchTerm}`);
-  //     const json = await response.json();
-  //     console.log(json)
-  //     // dispatch(searchmovie(searchTerm, json.Search));
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   useEffect(() => {
     props.searchmovie(searchTerm);
@@ -50,11 +41,12 @@ const MoviesScreen = ({ navigation, searchedMovies, dispatch, ...props}) => {
 
   const handleResetSearch = () => {
     setSearchTerm("");
-    // dispatch(searchmovie("", []));
+    
   };
-  // const handleMoviePress = (movieId) => {
-  //   navigation.navigate("Movie Details", { imdbID: movieId });
-  // };
+ 
+  const handleModalClose = () => {
+    setModalVisible(false);
+  };
 
   return (
     
@@ -93,6 +85,12 @@ const MoviesScreen = ({ navigation, searchedMovies, dispatch, ...props}) => {
         )}
       />
       </ScrollView>
+      <Modal visible={modalVisible} animationType="slide">
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalText}>Close</Text>
+          <Button title="Close" onPress={handleModalClose} />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -170,92 +168,118 @@ const AppNavigator = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#223343",
-    padding: 8,
-  },
-  emptyMessage: {
-    color: "white",
-    fontSize: 18,
-    alignSelf: "center",
-    marginTop: 50,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    justifyContent: "space-between",
+    padding: 10,
+    width: "100%",
+    backgroundColor: "#f2f2f2",
+    marginTop: 65, // Add margin top of 20
   },
   searchInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
     flex: 1,
-    height: 40,
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingHorizontal: 10,
+    marginRight: 10,
   },
   searchButton: {
-    backgroundColor: "blue",
+    backgroundColor: "#007AFF",
     padding: 10,
-    borderRadius: 10,
-    marginLeft: 10,
+    borderRadius: 5,
+},
+searchButtonText: {
+color: "#fff",
+
+fontWeight: "bold",
+},
+resultsContainer: {
+  flex: 1,
+  alignItems: "center",
+  justifyContent: "center",
+  marginTop: 20,
   },
-  searchButtonText: {
-    color: "white",
-    fontWeight: "bold",
+  resultText: {
+  fontSize: 20,
+  marginBottom: 10,
   },
-  resetButton: {
-    backgroundColor: "red",
-    padding: 10,
-    borderRadius: 10,
-    marginLeft: 10,
+  errorText: {
+  color: "red",
+  fontSize: 20,
+  marginBottom: 10,
   },
-  resetButtonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  backButton: {
-    marginLeft: 10,
-  },
-  backButtonIcon: {
-    color: "white",
-    fontSize: 20,
-  },
-  movieDetailsContainer: {
-    flex: 1,
-    padding: 16,
-  },
-  moviePoster: {
-    width: "100%",
-    height: 500,
-    resizeMode: "cover",
-    marginBottom: 16,
-  },
-  movieTitle: {
-    color: "white",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  movieDetails: {
-    color: "white",
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  movieRatingsContainer: {
-    flexDirection: "row",
-    marginBottom: 8,
-  },
-  movieRatingsText: {
-    color: "white",
-    fontSize: 16,
-    marginRight: 8,
-  },
-  movieRatingsValue: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  moviePlot: {
-    color: "white",
-    fontSize: 16,
-  },
- 
+resetButton: {
+backgroundColor: "gray",
+padding: 10,
+borderRadius: 5,
+},
+resetButtonText: {
+color: "#fff",
+fontSize: 16,
+fontWeight: "bold",
+},
+movieContainer: {
+flexDirection: "row",
+alignItems: "center",
+marginBottom: 10,
+},
+moviePoster: {
+  width: 150,
+  height: 225,
+  marginRight: 10,
+},
+detailsContainer: {
+flex: 1,
+justifyContent: "center",
+alignItems: "flex-start",
+},
+movieTitle: {
+fontSize: 18,
+fontWeight: "bold",
+marginBottom: 5,
+},
+movieDetails: {
+fontSize: 16,
+color: "#666",
+},
+modalContainer: {
+flex: 1,
+alignItems: "center",
+justifyContent: "center",
+backgroundColor: "rgba(0, 0, 0, 0.5)",
+},
+modalContent: {
+backgroundColor: "#fff",
+padding: 20,
+borderRadius: 10,
+elevation: 5,
+},
+modalTitle: {
+fontSize: 20,
+fontWeight: "bold",
+marginBottom: 10,
+},
+modalText: {
+fontSize: 16,
+marginBottom: 10,
+},
+modalButtonContainer: {
+flexDirection: "row",
+justifyContent: "flex-end",
+},
+modalButton: {
+padding: 10,
+marginHorizontal: 5,
+borderRadius: 5,
+},
+modalButtonText: {
+fontSize: 16,
+fontWeight: "bold",
+},
 });
